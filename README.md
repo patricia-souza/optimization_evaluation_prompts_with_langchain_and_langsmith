@@ -239,9 +239,7 @@ Avalia o prompt contra o dataset de 15 exemplos e exibe as 5 métricas. Objetivo
 ### Dashboard do Projeto
 
 🔗 **Link público do projeto:**
-`https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/projects/p/d33cacc9-b733-46f1-87cb-cf7c7179752e?timeModel=%7B%22duration%22%3A%221d%22%7D`
-
-> Para tornar público: LangSmith → Settings → Sharing → Enable public sharing
+<https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/projects/p/d33cacc9-b733-46f1-87cb-cf7c7179752e?timeModel=%7B%22duration%22%3A%221d%22%7D>
 
 ### Dataset de Avaliação (15 exemplos)
 
@@ -252,7 +250,7 @@ O dataset `prompt-optimization-challenge-resolved-eval` contém 15 bug reports c
 - **5 bugs complexos:** checkout crítico, estoque, z-index modal, relatórios gerenciais, app offline sync
 
 🔗 **Link do dataset:**
-`https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/datasets/8bc3f737-587a-414a-aa2d-fdc99a0c97a7?tab=1`
+<https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/datasets/8bc3f737-587a-414a-aa2d-fdc99a0c97a7?tab=1>
 
 ### Execuções com Notas ≥ 0.9 — Prompt v2 Otimizado
 
@@ -302,7 +300,7 @@ Acesse o tracing completo no LangSmith em:
 - Técnica aplicada: Chain of Thought identificou 4 problemas distintos → gerou user story principal + 4 blocos de critérios separados (Segurança, Integração, Lógica, UX) + seções técnicas completas
 - Métricas: F1:1.00 | Clarity:1.00 | Precision:1.00
 
-🔗 **Prompt público no Hub:** https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0
+🔗 **Prompt público no Hub:** <https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0>
 
 ---
 

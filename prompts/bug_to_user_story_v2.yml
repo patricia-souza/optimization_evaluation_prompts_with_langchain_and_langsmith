@@ -51,7 +51,7 @@ system_prompt: |
   - E devo ver uma confirmação visual
   - E o contador do carrinho deve ser atualizado
 
-  ===
+  ---
 
   BUG: "Campo de email aceita texto sem @, permitindo cadastros inválidos."
   RESPOSTA:
@@ -64,7 +64,7 @@ system_prompt: |
   - E não devo conseguir prosseguir com o cadastro
   - E a mensagem deve explicar o formato correto
 
-  ===
+  ---
 
   BUG: "No iOS, ao girar o celular para landscape, o layout da tela de perfil fica quebrado."
   RESPOSTA:
@@ -77,7 +77,7 @@ system_prompt: |
   - E todos os elementos devem permanecer visíveis e alinhados
   - E não deve haver sobreposição de componentes
 
-  ===
+  ---
 
   BUG: "Dashboard mostra contagem errada de usuários ativos. Mostra 50 mas só há 42 na lista."
   RESPOSTA:
@@ -90,7 +90,7 @@ system_prompt: |
   - E o valor deve ser atualizado em tempo real
   - E deve incluir apenas usuários com status "ativo"
 
-  ===
+  ---
 
   BUG: "Imagens de produtos não aparecem no Safari. No Chrome funciona normal."
   RESPOSTA:
@@ -103,7 +103,7 @@ system_prompt: |
   - E devem ter a mesma qualidade que em outros navegadores
   - E o tempo de carregamento deve ser similar
 
-  ===
+  ---
 
   BUG: "Endpoint /api/users/:id retorna dados de qualquer usuário sem validar permissões.
 
@@ -135,7 +135,7 @@ system_prompt: |
   - Dados expostos: email, telefone, endereço
   - Ação: Implementar middleware de autorização
 
-  ===
+  ---
 
   BUG: "Pipeline de vendas calcula valor total errado quando há desconto.
 
@@ -168,7 +168,7 @@ system_prompt: |
   - Bug atual: desconto sendo aplicado apenas no primeiro produto
   - Resultado incorreto: R$ 1.400 (deveria ser R$ 1.350)
 
-  ===
+  ---
 
   BUG: "Webhook de pagamento aprovado não está sendo chamado.
   Steps to reproduce:
@@ -194,7 +194,7 @@ system_prompt: |
   - Gateway: [nome do gateway de pagamento]
   - Logs indicam falha no processamento do webhook
 
-  ===
+  ---
 
   BUG: "App Android trava ao carregar lista de notificações com mais de 50 itens.
   Observações:
@@ -223,7 +223,7 @@ system_prompt: |
   - Sintoma: ANR após 50+ itens
   - Tempo de tela congelada: 5-10 segundos
 
-  ===
+  ---
 
   BUG: "Carrinho permite finalizar compra mesmo com produto fora de estoque.
 
@@ -256,7 +256,7 @@ system_prompt: |
   - Impacto: pedidos criados sem possibilidade de atendimento
   - Cenário crítico: múltiplos clientes comprando último item
 
-  ===
+  ---
 
   BUG: "Modal de confirmação de exclusão aparece atrás do menu lateral em telas pequenas (< 768px).
 
@@ -286,7 +286,7 @@ system_prompt: |
   - Solução: ajustar z-index do modal para > 1050
   - Devices afetados: mobile e tablets (< 768px)
 
-  ===
+  ---
 
-  BUG: [bug report do usuário]
+  BUG: {bug_report}
   RESPOSTA:

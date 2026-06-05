@@ -159,6 +159,32 @@ def test_prompt_has_few_shot_examples(prompt_data):
     )
 
 
+# def test_prompt_no_todos(prompt_data):
+#     """
+#     Garante que não existem marcadores [TODO] ou # TODO no prompt.
+#     """
+#     system_prompt = prompt_data.get("system_prompt", "")
+#     user_prompt = prompt_data.get("user_prompt", "")
+#     description = prompt_data.get("description", "")
+#
+#     fields_to_check = {
+#         "system_prompt": system_prompt,
+#         "user_prompt": user_prompt,
+#         "description": description,
+#     }
+#
+#     todos_found = []
+#     for field_name, content in fields_to_check.items():
+#         if content and "TODO" in str(content).upper():
+#             todos_found.append(field_name)
+#
+#     assert not todos_found, (
+#         f"TODOs encontrados nos campos: {', '.join(todos_found)}\n"
+#         "Remova todos os marcadores [TODO] antes de usar o prompt em produção."
+#     )
+
+
+
 def test_prompt_no_todos(prompt_data):
     """
     Garante que não existem marcadores [TODO] ou # TODO no prompt.
@@ -173,15 +199,20 @@ def test_prompt_no_todos(prompt_data):
         "description": description,
     }
 
+    # Busca por marcadores explícitos [TODO] ou # TODO, não substrings
+    import re
+    todo_pattern = re.compile(r'\[TODO\]|#\s*TODO\b', re.IGNORECASE)
+
     todos_found = []
     for field_name, content in fields_to_check.items():
-        if content and "TODO" in str(content).upper():
+        if content and todo_pattern.search(str(content)):
             todos_found.append(field_name)
 
     assert not todos_found, (
         f"TODOs encontrados nos campos: {', '.join(todos_found)}\n"
         "Remova todos os marcadores [TODO] antes de usar o prompt em produção."
     )
+
 
 
 def test_minimum_techniques(prompt_data):
