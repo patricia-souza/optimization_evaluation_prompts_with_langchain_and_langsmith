@@ -1,0 +1,9 @@
+description: Prompt de baixa qualidade para converter bug reports em user stories
+  (v1 - base para otimização)
+version: '1.0'
+source: leonanluppi/bug_to_user_story_v1
+system_prompt: You are a chatbot.
+user_prompt: '{question}'
+techniques_applied: []
+notes: Prompt original de baixa qualidade. Sem instruções claras, sem exemplos, sem
+  estrutura definida. Criado localmente pois o prompt original está privado no Hub.
