@@ -395,4 +395,4 @@ Access full tracing on LangSmith at:
 - Technique applied: Chain of Thought identified 4 distinct problems → generated main user story + 4 separate criteria blocks (Security, Integration, Logic, UX) + complete technical sections
 - Metrics: F1:1.00 | Clarity:1.00 | Precision:1.00
 
-🔗 **Public prompt on Hub:** <https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0>
+🔗 **Public project link (tracing):** <https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/projects/p/d33cacc9-b733-46f1-87cb-cf7c7179752e?timeModel=%7B%22duration%22%3A%221d%22%7D>
