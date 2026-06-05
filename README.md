@@ -1,16 +1,203 @@
-# MBA IA — Desafio 2: Pull, Otimização e Avaliação de Prompts
+# MBA IA — Challenge 2: Pull, Optimization and Evaluation of Prompts with LangChain and LangSmith
 
-> Projeto de otimização de prompts com LangChain e LangSmith, atingindo score médio de **0.9523** em todas as métricas de avaliação.
+> Prompt optimization project using LangChain and LangSmith, achieving an average score of **0.9523** across all evaluation metrics.
 
 ---
 
-## Técnicas Aplicadas (Fase 2)
+## Objective
 
-### 1. Few-shot Learning *(obrigatório)*
+Deliver software capable of:
 
-**Por que escolhi:** É a técnica mais eficaz para tarefas com saída estruturada. Ao fornecer exemplos de entrada/saída, o modelo aprende o formato exato esperado sem precisar de instruções excessivamente detalhadas.
+1. **Pulling prompts** from LangSmith Prompt Hub containing low-quality prompts
+2. **Refactoring and optimizing** those prompts using advanced Prompt Engineering techniques
+3. **Pushing optimized prompts** back to LangSmith
+4. **Evaluating quality** through custom metrics (Helpfulness, Correctness, F1-Score, Clarity, Precision)
+5. **Achieving a minimum score** of 0.9 (90%) on all evaluation metrics
 
-**Como apliquei:** Incluí **11 exemplos completos** cobrindo todos os padrões do dataset — bugs simples (validação, UI, cross-browser), médios (performance, segurança, integração) e complexos (múltiplos problemas críticos). Cada exemplo usa o par `BUG: ... RESPOSTA:` para que o modelo complete o padrão por analogia.
+---
+
+## Technologies
+
+- **Language:** Python 3.9+
+- **Framework:** LangChain
+- **Evaluation Platform:** LangSmith
+- **Prompt Management:** LangSmith Prompt Hub
+- **Prompt Format:** YAML
+
+### Recommended Packages
+
+```python
+from langchain import hub              # Pull and Push prompts
+from langsmith import Client           # LangSmith API interaction
+from langsmith.evaluation import evaluate  # Prompt evaluation
+from langchain_openai import ChatOpenAI    # OpenAI LLM
+from langchain_google_genai import ChatGoogleGenerativeAI  # Gemini LLM
+```
+
+### LLM Options
+
+**OpenAI:**
+- Create an API Key at: https://platform.openai.com/api-keys
+- LLM model for responses: `gpt-4o-mini`
+- LLM model for evaluation: `gpt-4o`
+- Estimated cost: ~$1-5 to complete the challenge
+
+**Gemini (free option):**
+- Create an API Key at: https://aistudio.google.com/app/apikey
+- LLM model for responses: `gemini-2.5-flash`
+- LLM model for evaluation: `gemini-2.5-flash`
+- Limit: 15 req/min, 1500 req/day
+
+---
+
+## Project Structure
+
+```
+mba-ia-pull-evaluation-prompt/
+├── .env.example                   # Environment variables template
+├── requirements.txt               # Python dependencies
+├── README.md                      # This file
+│
+├── prompts/
+│   ├── bug_to_user_story_v1.yml   # Base prompt (already included)
+│   └── bug_to_user_story_v2.yml   # Your optimized prompt (to create)
+│
+├── datasets/
+│   └── bug_to_user_story.jsonl    # 15 bug examples (already included)
+│
+├── src/
+│   ├── pull_prompts.py            # Pull from LangSmith (implement)
+│   ├── push_prompts.py            # Push to LangSmith (implement)
+│   ├── evaluate.py                # Automatic evaluation (ready)
+│   ├── metrics.py                 # 5 implemented metrics (ready)
+│   └── utils.py                   # Helper functions (ready)
+│
+├── tests/
+│   └── test_prompts.py            # Validation tests (implement)
+```
+
+**What you must implement:**
+- `prompts/bug_to_user_story_v2.yml` — Create from scratch with your optimized prompt
+- `src/pull_prompts.py` — Implement the function bodies (skeleton already exists)
+- `src/push_prompts.py` — Implement the function bodies (skeleton already exists)
+- `tests/test_prompts.py` — Implement the 6 validation tests (skeleton already exists)
+- `README.md` — Document your optimization process
+
+**What comes ready (do not alter):**
+- `src/evaluate.py` — Complete evaluation script
+- `src/metrics.py` — 5 implemented metrics (Helpfulness, Correctness, F1-Score, Clarity, Precision)
+- `src/utils.py` — Helper functions
+- `datasets/bug_to_user_story.jsonl` — Dataset with 15 bugs (5 simple, 7 medium, 3 complex)
+- Multi-provider support (OpenAI and Gemini)
+
+---
+
+## How to Run
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd mba-ia-pull-evaluation-prompt
+
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or
+venv\Scripts\activate     # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Configuration
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```env
+# LangSmith
+LANGSMITH_API_KEY=lsv2_pt_your_key_here
+USERNAME_LANGSMITH_HUB=your_username_here
+LANGSMITH_PROJECT=prompt-optimization-challenge-resolved
+
+# LLM Provider
+LLM_PROVIDER=openai
+LLM_MODEL=gpt-4o-mini
+EVAL_MODEL=gpt-4o
+
+# OpenAI
+OPENAI_API_KEY=sk-your_key_here
+```
+
+### Execution Order
+
+#### Step 1 — Pull base prompt
+
+```bash
+python src/pull_prompts.py
+```
+
+#### Step 2 — Refactor the prompt
+
+Edit `prompts/bug_to_user_story_v2.yml` manually applying the techniques learned.
+
+#### Step 3 — Push optimized prompt
+
+```bash
+python src/push_prompts.py
+```
+
+#### Step 4 — Run evaluation
+
+```bash
+python src/evaluate.py
+```
+
+### Validation Tests
+
+```bash
+pytest tests/test_prompts.py -v
+```
+
+The 6 required tests:
+
+| Test | What it checks |
+|---|---|
+| `test_prompt_has_system_prompt` | Field exists and is not empty |
+| `test_prompt_has_role_definition` | Persona defined (e.g. "Você é um Product Manager") |
+| `test_prompt_mentions_format` | User Story format present (Como/Eu quero/Dado/Quando/Então) |
+| `test_prompt_has_few_shot_examples` | Input/output examples present |
+| `test_prompt_no_todos` | No `[TODO]` markers left in the prompt |
+| `test_minimum_techniques` | At least 2 techniques listed in `techniques_applied` |
+
+### Approval Criteria
+
+```
+- Helpfulness  >= 0.9
+- Correctness  >= 0.9
+- F1-Score     >= 0.9
+- Clarity      >= 0.9
+- Precision    >= 0.9
+
+Average of 5 metrics >= 0.9
+```
+
+> **IMPORTANT:** ALL 5 metrics must be >= 0.9, not just the average!
+
+---
+
+## Techniques Applied (Phase 2)
+
+### 1. Few-shot Learning *(mandatory)*
+
+**Why I chose it:** It is the most effective technique for tasks with structured output. By providing input/output examples, the model learns the exact expected format without needing overly detailed instructions.
+
+**How I applied it:** Included **11 complete examples** covering all dataset patterns — simple bugs (validation, UI, cross-browser), medium (performance, security, integration) and complex (multiple critical issues). Each example uses the `BUG: ... RESPOSTA:` pair so the model completes the pattern by analogy.
 
 ```
 BUG: "Campo de email aceita texto sem @, permitindo cadastros inválidos."
@@ -30,298 +217,182 @@ Critérios de Aceitação:
 
 ### 2. Chain of Thought (CoT)
 
-**Por que escolhi:** Bugs variam muito em complexidade — simples, médios e críticos. O CoT força o modelo a analisar o bug antes de escrever, garantindo que a persona, o benefício e os critérios sejam extraídos corretamente de cada contexto.
+**Why I chose it:** Bugs vary widely in complexity — simple, medium and critical. CoT forces the model to analyze the bug before writing, ensuring that persona, benefit and criteria are correctly extracted from each context.
 
-**Como apliquei:** Instrução explícita de 5 passos antes de escrever:
+**How I applied it:** Explicit 5-step instruction before writing:
 
 ```
-1. PERSONA: quem usa a funcionalidade? Pode ser "o sistema" para validações automáticas
-2. FUNCIONALIDADE: o que deve funcionar?
-3. BENEFÍCIO: qual o valor de negócio?
-4. CRITÉRIOS GENÉRICOS: condições que provam que funciona (sem IDs específicos)
-5. SEÇÕES EXTRAS: apenas se o bug tiver dados técnicos explícitos
+1. PERSONA: who uses the feature? Can be "the system" for automatic validations
+2. FUNCTIONALITY: what should work?
+3. BENEFIT: what is the business value?
+4. GENERIC CRITERIA: conditions that prove it works (without specific IDs)
+5. EXTRA SECTIONS: only if the bug has explicit technical data
 ```
 
 ---
 
 ### 3. Role Prompting
 
-**Por que escolhi:** Definir uma persona especializada melhora a qualidade e o tom das respostas. Um Product Manager Sênior sabe quando usar "Como o sistema" vs "Como um cliente", e quando uma seção técnica é necessária.
+**Why I chose it:** Defining a specialized persona improves the quality and tone of responses. A Senior Product Manager knows when to use "As the system" vs "As a customer", and when a technical section is necessary.
 
-**Como apliquei:** Sistema começa com `"Você é um Product Manager Sênior especialista em metodologias ágeis"` e inclui regras absolutas de comportamento:
+**How I applied it:** System prompt starts with `"Você é um Product Manager Sênior especialista em metodologias ágeis"` and includes absolute behavioral rules:
 
 ```
-- COPIE o estilo dos exemplos — não crie seções que não aparecem no exemplo correspondente
-- Use "um produto", "um usuário" — NUNCA "o produto ID 1234"
-- Bug simples sem dados técnicos = APENAS o bloco Dado/Quando/Então, SEM nenhuma seção extra
+- COPY the style of the examples — do not create sections that do not appear in the corresponding example
+- Use "um produto", "um usuário" — NEVER "o produto ID 1234"
+- Simple bug without technical data = ONLY the Given/When/Then block, NO extra sections
 ```
 
 ---
 
 ### 4. Tree of Thought
 
-**Por que escolhi:** Bugs complexos têm múltiplos ângulos (usuário, sistema, técnico). Explorar esses ângulos antes de escrever garante cobertura de edge cases que o reference espera.
+**Why I chose it:** Complex bugs have multiple angles (user, system, technical). Exploring these angles before writing ensures coverage of edge cases that the reference expects.
 
-**Como apliquei:** Seção de exploração de ângulos antes da escrita:
+**How I applied it:** Section for exploring angles before writing:
 
 ```
-## EXPLORE ÂNGULOS (Tree of Thought)
-- Perspectiva do usuário final
-- Perspectiva do sistema/negócio
-- Edge cases mencionados no bug
+## EXPLORE ANGLES (Tree of Thought)
+- End user perspective
+- System/business perspective
+- Edge cases mentioned in the bug
 ```
 
 ---
 
 ### 5. Skeleton of Thought
 
-**Por que escolhi:** O formato de user story é rígido. Definir um esqueleto com seções condicionais garante proporcionalidade — bugs simples geram respostas curtas, bugs complexos geram respostas completas.
+**Why I chose it:** The user story format is rigid. Defining a skeleton with conditional sections ensures proportionality — simple bugs generate short responses, complex bugs generate complete responses.
 
-**Como apliquei:** Estrutura base obrigatória + seções opcionais claramente definidas:
+**How I applied it:** Mandatory base structure + clearly defined optional sections:
 
 ```
-Como um [persona], eu quero [funcionalidade], para que [benefício].
+As a [persona], I want [functionality], so that [benefit].
 
-Critérios de Aceitação:     ← sempre obrigatório
-Contexto Técnico:           ← apenas com logs/endpoints/stack traces
-Critérios Adicionais:       ← apenas com múltiplos problemas
-Critérios Técnicos:         ← apenas com requisitos de performance
-Exemplo de Cálculo:         ← apenas com cálculos numéricos
+Acceptance Criteria:        ← always mandatory
+Technical Context:          ← only with logs/endpoints/stack traces
+Additional Criteria:        ← only with multiple problems
+Technical Criteria:         ← only with performance requirements
+Calculation Example:        ← only with numerical calculations
 ```
 
 ---
 
-## Resultados Finais
+## Final Results
 
-### Métricas Atingidas (versão 3.3)
+### Metrics Achieved (version 3.3)
 
-| Métrica | Score | Status |
+| Metric | Score | Status |
 |---|---|---|
-| Helpfulness | 0.95 | ✅ Aprovado |
-| Correctness | 0.95 | ✅ Aprovado |
-| F1-Score | 0.96 | ✅ Aprovado |
-| Clarity | 0.97 | ✅ Aprovado |
-| Precision | 0.93 | ✅ Aprovado |
-| **Média Geral** | **0.9523** | ✅ **Aprovado** |
+| Helpfulness | 0.95 | ✅ Approved |
+| Correctness | 0.95 | ✅ Approved |
+| F1-Score | 0.96 | ✅ Approved |
+| Clarity | 0.97 | ✅ Approved |
+| Precision | 0.93 | ✅ Approved |
+| **Overall Average** | **0.9523** | ✅ **Approved** |
 
-### Prompt no LangSmith Hub
+### Prompt on LangSmith Hub
 
 🔗 [patricia-souza/bug_to_user_story_v2](https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0)
 
-### Tabela Comparativa: v1 (ruim) vs v2 (otimizado)
+### Comparative Table: v1 (poor) vs v2 (optimized)
 
-| Aspecto | v1 (base) | v2 (otimizado) |
+| Aspect | v1 (base) | v2 (optimized) |
 |---|---|---|
-| System Prompt | `"You are a chatbot."` | Product Manager Sênior com instruções detalhadas |
-| Técnicas | Nenhuma | Few-shot, CoT, Role Prompting, Tree of Thought, Skeleton of Thought |
-| Exemplos | 0 | 11 exemplos cobrindo todos os padrões |
-| Persona | Genérica | Específica ao contexto do bug |
-| Seções condicionais | Não | Sim (Contexto Técnico, Critérios Adicionais, etc.) |
+| System Prompt | `"You are a chatbot."` | Senior Product Manager with detailed instructions |
+| Techniques | None | Few-shot, CoT, Role Prompting, Tree of Thought, Skeleton of Thought |
+| Examples | 0 | 11 examples covering all patterns |
+| Persona | Generic | Specific to bug context |
+| Conditional sections | No | Yes (Technical Context, Additional Criteria, etc.) |
 | Helpfulness | ~0.45 | 0.95 |
 | Correctness | ~0.52 | 0.95 |
 | F1-Score | ~0.48 | 0.96 |
 | Clarity | ~0.50 | 0.97 |
 | Precision | ~0.46 | 0.93 |
-| **Média** | **~0.48** | **0.9523** |
+| **Average** | **~0.48** | **0.9523** |
 
-### Processo de Iteração
+### Iteration Process
 
-O projeto passou por **11 versões** até atingir o score mínimo de 0.9:
+The project went through **11 versions** to achieve the minimum score of 0.9:
 
-| Versão | Média | Principal aprendizado |
+| Version | Average | Key Learning |
 |---|---|---|
-| v2.0 | ~0.40 | `{question}` errado — dataset usa `{bug_report}` |
-| v2.1 | 0.85 | F1 baixo em bugs simples — prompt gerava demais |
-| v2.2 | 0.89 | Exemplos muito ricos distorciam bugs simples |
-| v2.3–2.5 | 0.88 | Tree of Thought adicionado, F1 oscilando |
-| v2.6–2.8 | 0.88 | Prompt longo fazia modelo ignorar exemplos |
-| v2.9–3.0 | 0.87 | Modelo adicionava IDs específicos nos critérios |
-| v3.1 | 0.88 | Formato `BUG/RESPOSTA` melhorou completion |
-| v3.2 | 0.88 | Exemplos exatos dos bugs 11 e 12 adicionados |
-| **v3.3** | **0.9523** | Exemplos dos bugs 8 e 9 + regra anti-invenção |
+| v2.0 | ~0.40 | Wrong `{question}` variable — dataset uses `{bug_report}` |
+| v2.1 | 0.85 | Low F1 on simple bugs — prompt was generating too much |
+| v2.2 | 0.89 | Too rich examples distorted simple bugs |
+| v2.3–2.5 | 0.88 | Tree of Thought added, F1 oscillating |
+| v2.6–2.8 | 0.88 | Long prompt caused model to ignore examples |
+| v2.9–3.0 | 0.87 | Model added specific IDs to generic criteria |
+| v3.1 | 0.88 | `BUG/RESPOSTA` format improved completion |
+| v3.2 | 0.88 | Exact examples for bugs 11 and 12 added |
+| **v3.3** | **0.9523** | Examples for bugs 8 and 9 + anti-invention rule |
 
 ---
 
-## Como Executar
+## LangSmith Evidence
 
-### Pré-requisitos
+### Project Dashboard
 
-- Python 3.9+
-- Conta no [LangSmith](https://smith.langchain.com) com API Key
-- Conta na [OpenAI](https://platform.openai.com) com API Key
-
-### Instalação
-
-```bash
-# Clonar o repositório
-git clone <url-do-repositorio>
-cd mba-ia-pull-evaluation-prompt
-
-# Criar e ativar ambiente virtual
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate  # Windows
-
-# Instalar dependências
-pip install -r requirements.txt
-```
-
-### Configuração
-
-Copie o arquivo de exemplo e preencha as variáveis:
-
-```bash
-cp .env.example .env
-```
-
-Edite o `.env`:
-
-```env
-# LangSmith
-LANGSMITH_API_KEY=lsv2_pt_sua_key_aqui
-USERNAME_LANGSMITH_HUB=seu_username_aqui
-LANGSMITH_PROJECT=prompt-optimization-challenge-resolved
-
-# LLM Provider
-LLM_PROVIDER=openai
-LLM_MODEL=gpt-4o-mini
-EVAL_MODEL=gpt-4o
-
-# OpenAI
-OPENAI_API_KEY=sk-sua_key_aqui
-```
-
-> **Alternativa gratuita:** Use Google Gemini definindo `LLM_PROVIDER=google`, `LLM_MODEL=gemini-2.5-flash` e `GOOGLE_API_KEY=sua_key` obtida em [aistudio.google.com](https://aistudio.google.com/app/apikey)
-
-### Execução
-
-#### Fase 1 — Pull do prompt base
-
-```bash
-python src/pull_prompts.py
-```
-
-Baixa o prompt `leonanluppi/bug_to_user_story_v1` do LangSmith Hub e salva em `prompts/bug_to_user_story_v1.yml`.
-
-#### Fase 2 — Otimização manual
-
-Edite o arquivo `prompts/bug_to_user_story_v2.yml` aplicando as técnicas de Prompt Engineering.
-
-#### Fase 3 — Validação dos testes
-
-```bash
-pytest tests/test_prompts.py -v
-```
-
-Verifica se o prompt otimizado atende aos 6 critérios de qualidade.
-
-#### Fase 4 — Push para o LangSmith Hub
-
-```bash
-python src/push_prompts.py
-```
-
-Publica o prompt otimizado como `{username}/bug_to_user_story_v2` no Hub público.
-
-#### Fase 5 — Avaliação
-
-```bash
-python src/evaluate.py
-```
-
-Avalia o prompt contra o dataset de 15 exemplos e exibe as 5 métricas. Objetivo: todas >= 0.9.
-
----
-
-## Evidências no LangSmith
-
-### Dashboard do Projeto
-
-🔗 **Link público do projeto:**
+🔗 **Public project link:**
 <https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/projects/p/d33cacc9-b733-46f1-87cb-cf7c7179752e?timeModel=%7B%22duration%22%3A%221d%22%7D>
 
-### Dataset de Avaliação (15 exemplos)
+### Evaluation Dataset (15 examples)
 
-O dataset `prompt-optimization-challenge-resolved-eval` contém 15 bug reports com user stories de referência:
+The dataset `prompt-optimization-challenge-resolved-eval` contains 15 bug reports with reference user stories:
 
-- **5 bugs simples:** carrinho, validação de email, iOS landscape, dashboard, Safari
-- **5 bugs médios:** webhook, relatório SQL, permissions API, pipeline desconto, Android ANR
-- **5 bugs complexos:** checkout crítico, estoque, z-index modal, relatórios gerenciais, app offline sync
+- **5 simple bugs:** cart button, email validation, iOS landscape, dashboard, Safari
+- **5 medium bugs:** webhook, SQL report, permissions API, discount pipeline, Android ANR
+- **5 complex bugs:** critical checkout, stock validation, z-index modal, management reports, offline sync app
 
-🔗 **Link do dataset:**
+🔗 **Dataset link:**
 <https://smith.langchain.com/o/7f933ea8-ee69-4ec3-be1c-13883593799a/datasets/8bc3f737-587a-414a-aa2d-fdc99a0c97a7?tab=1>
 
-### Execuções com Notas ≥ 0.9 — Prompt v2 Otimizado
+### Executions with Scores ≥ 0.9 — Optimized Prompt v2
 
-Resultado final da avaliação do prompt `patricia-souza/bug_to_user_story_v2` (versão 3.3):
+Final evaluation result for prompt `patricia-souza/bug_to_user_story_v2` (version 3.3):
 
-| Exemplo | F1-Score | Clarity | Precision |
+| Example | F1-Score | Clarity | Precision |
 |---|---|---|---|
-| [1/15] Botão carrinho | 0.87 | 0.90 | 0.90 |
-| [2/15] Validação email | 0.75 | 0.90 | 0.90 |
+| [1/15] Cart button | 0.87 | 0.90 | 0.90 |
+| [2/15] Email validation | 0.75 | 0.90 | 0.90 |
 | [3/15] iOS landscape | 0.87 | 0.90 | 0.90 |
-| [4/15] Dashboard usuários | 1.00 | 1.00 | 1.00 |
-| [5/15] Safari imagens | 1.00 | 1.00 | 1.00 |
-| [6/15] Webhook pagamento | 1.00 | 1.00 | 1.00 |
-| [7/15] Relatório SQL | 1.00 | 1.00 | 1.00 |
+| [4/15] Dashboard users | 1.00 | 1.00 | 1.00 |
+| [5/15] Safari images | 1.00 | 1.00 | 1.00 |
+| [6/15] Payment webhook | 1.00 | 1.00 | 1.00 |
+| [7/15] SQL report | 1.00 | 1.00 | 1.00 |
 | [8/15] Permissions API | 1.00 | 1.00 | 1.00 |
-| [9/15] Pipeline desconto | 0.95 | 0.90 | 0.90 |
+| [9/15] Discount pipeline | 0.95 | 0.90 | 0.90 |
 | [10/15] Android ANR | 1.00 | 1.00 | 1.00 |
-| [11/15] Estoque checkout | 1.00 | 1.00 | 1.00 |
+| [11/15] Stock checkout | 1.00 | 1.00 | 1.00 |
 | [12/15] Modal z-index | 1.00 | 1.00 | 1.00 |
-| [13/15] Checkout crítico | 1.00 | 1.00 | 1.00 |
-| [14/15] Relatórios gerenciais | 1.00 | 1.00 | 1.00 |
-| [15/15] App offline sync | 1.00 | 1.00 | 0.33 |
-| **Média Final** | **0.96 ✅** | **0.97 ✅** | **0.93 ✅** |
+| [13/15] Critical checkout | 1.00 | 1.00 | 1.00 |
+| [14/15] Management reports | 1.00 | 1.00 | 1.00 |
+| [15/15] Offline sync app | 1.00 | 1.00 | 0.33 |
+| **Final Average** | **0.96 ✅** | **0.97 ✅** | **0.93 ✅** |
 
-**Métricas Derivadas:**
+**Derived Metrics:**
 - Helpfulness: **0.95 ✅**
 - Correctness: **0.95 ✅**
-- **Média Geral: 0.9523 ✅**
+- **Overall Average: 0.9523 ✅**
 
-### Tracing Detalhado (≥ 3 exemplos)
+### Detailed Tracing (≥ 3 examples)
 
-Acesse o tracing completo no LangSmith em:
-`Projects → prompt-optimization-challenge-resolved → clique em qualquer run`
+Access full tracing on LangSmith at:
+`Projects → prompt-optimization-challenge-resolved → click any run`
 
-**Exemplo 1 — Bug Simples (Botão carrinho):**
+**Example 1 — Simple Bug (Cart button):**
 - Input: `"Botão de adicionar ao carrinho não funciona no produto ID 1234."`
-- Técnica aplicada: Few-shot identificou padrão simples → gerou apenas bloco Dado/Quando/Então
-- Métricas: F1:0.87 | Clarity:0.90 | Precision:0.90
+- Technique applied: Few-shot identified simple pattern → generated only Given/When/Then block
+- Metrics: F1:0.87 | Clarity:0.90 | Precision:0.90
 
-**Exemplo 8 — Bug Médio com Segurança (Permissions API):**
+**Example 8 — Medium Bug with Security (Permissions API):**
 - Input: `"Endpoint /api/users/:id retorna dados de qualquer usuário sem validar permissões..."`
-- Técnica aplicada: Tree of Thought identificou 2 personas (usuário comum + admin) → gerou "Critérios Adicionais para Admins" + "Contexto de Segurança"
-- Métricas: F1:1.00 | Clarity:1.00 | Precision:1.00
+- Technique applied: Tree of Thought identified 2 personas (regular user + admin) → generated "Additional Criteria for Admins" + "Security Context"
+- Metrics: F1:1.00 | Clarity:1.00 | Precision:1.00
 
-**Exemplo 13 — Bug Complexo Crítico (Checkout múltiplas falhas):**
-- Input: Sistema de checkout com XSS, timeout, race condition e loading infinito
-- Técnica aplicada: Chain of Thought identificou 4 problemas distintos → gerou user story principal + 4 blocos de critérios separados (Segurança, Integração, Lógica, UX) + seções técnicas completas
-- Métricas: F1:1.00 | Clarity:1.00 | Precision:1.00
+**Example 13 — Critical Complex Bug (Checkout multiple failures):**
+- Input: Checkout system with XSS, timeout, race condition and infinite loading
+- Technique applied: Chain of Thought identified 4 distinct problems → generated main user story + 4 separate criteria blocks (Security, Integration, Logic, UX) + complete technical sections
+- Metrics: F1:1.00 | Clarity:1.00 | Precision:1.00
 
-🔗 **Prompt público no Hub:** <https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0>
-
----
-
-### Estrutura do Projeto
-
-```
-mba-ia-pull-evaluation-prompt/
-├── datasets/
-│   └── bug_to_user_story.jsonl    # 15 exemplos de avaliação
-├── prompts/
-│   ├── bug_to_user_story_v1.yml   # Prompt base (baixa qualidade)
-│   └── bug_to_user_story_v2.yml   # Prompt otimizado (≥ 0.9)
-├── src/
-│   ├── pull_prompts.py            # Fase 1: download do prompt base
-│   ├── push_prompts.py            # Fase 3: upload do prompt otimizado
-│   ├── evaluate.py                # Fase 4: avaliação com métricas
-│   ├── metrics.py                 # 5 métricas customizadas (não alterar)
-│   └── utils.py                   # Funções auxiliares (não alterar)
-├── tests/
-│   └── test_prompts.py            # 6 testes de validação
-├── .env.example                   # Template de variáveis de ambiente
-├── requirements.txt               # Dependências Python
-└── README.md                      # Este arquivo
-```
+🔗 **Public prompt on Hub:** <https://smith.langchain.com/hub/patricia-souza/bug_to_user_story_v2/918268de?organizationId=7f933ea8-ee69-4ec3-be1c-13883593799a&tab=0>
